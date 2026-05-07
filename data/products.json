@@ -1,0 +1,29 @@
+[
+  {
+    "id": "1",
+    "name": "Aurora Pro Wireless Earbuds",
+    "category": "electronics",
+    "image": "https://images.unsplash.com/photo-1606220588913-b3aacb4d2f46?auto=format&fit=crop&w=900&q=80",
+    "price": 79,
+    "originalPrice": 129,
+    "rating": 4.7,
+    "reviews": 1240,
+    "description": "Premium noise-cancelling earbuds with adaptive audio and fast pairing.",
+    "features": ["36-hour battery", "Adaptive ANC", "IPX5 sweat resistance", "USB-C fast charge"],
+    "inStock": true,
+    "flashDeal": true
+  },
+  {
+    "id": "2",
+    "name": "Velocity Smartwatch Series X",
+    "category": "electronics",
+    "image": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=900&q=80",
+    "price": 159,
+    "originalPrice": 229,
+    "rating": 4.8,
+    "reviews": 860,
+    "description": "Elegant health-focused smartwatch with premium build and bright AMOLED display.",
+    "features": ["Heart + sleep tracking", "7-day battery", "Water resistant", "GPS"],
+    "inStock": true
+  }
+]

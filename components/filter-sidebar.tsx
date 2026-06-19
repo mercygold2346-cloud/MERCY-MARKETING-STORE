@@ -50,7 +50,7 @@ export function FilterSidebar({
             type="range"
             className="w-full accent-slate-900"
             min={20}
-            max={250}
+            max={1000}
             value={maxPrice}
             onChange={(e) => onPriceChange(Number(e.target.value))}
             aria-label="Maximum price filter"

@@ -2,18 +2,29 @@
 
 import { FilterSidebar } from "@/components/filter-sidebar";
 import { ProductCard } from "@/components/product-card";
+import { Button } from "@/components/ui/button";
 import { SectionHeading } from "@/components/section-heading";
 import { products } from "@/data/products";
-import { useMemo, useState } from "react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 
 type SortOption = "featured" | "price-asc" | "price-desc" | "rating-desc";
 
 export function ShopClient() {
+  const searchParams = useSearchParams();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [maxPrice, setMaxPrice] = useState(250);
+  const [maxPrice, setMaxPrice] = useState(1000);
   const [minRating, setMinRating] = useState(4.0);
   const [sortBy, setSortBy] = useState<SortOption>("featured");
+
+  useEffect(() => {
+    const category = searchParams.get("category");
+    const q = searchParams.get("q") ?? "";
+    setSearchQuery(q);
+    setSelectedCategories(category ? [category] : []);
+  }, [searchParams]);
 
   const filteredProducts = useMemo(() => {
     const normalized = searchQuery.trim().toLowerCase();
@@ -44,6 +55,14 @@ export function ShopClient() {
     );
   };
 
+  const clearFilters = () => {
+    setSearchQuery("");
+    setSelectedCategories([]);
+    setMaxPrice(1000);
+    setMinRating(4.0);
+    setSortBy("featured");
+  };
+
   return (
     <div className="mx-auto w-full max-w-7xl px-4 pb-16 pt-8 sm:px-6 lg:px-8">
       <SectionHeading
@@ -60,20 +79,20 @@ export function ShopClient() {
           onRatingChange={setMinRating}
         />
         <div>
-          <div className="mb-4 flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-4 text-sm text-slate-600 sm:flex-row">
+          <div className="mb-4 flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-4 text-sm text-slate-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 sm:flex-row">
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search products..."
               aria-label="Search products"
-              className="h-10 flex-1 rounded-full border border-slate-200 bg-slate-50 px-4 text-sm text-slate-700 outline-none ring-slate-900/10 focus:ring-2"
+              className="h-10 flex-1 rounded-full border border-slate-200 bg-slate-50 px-4 text-sm text-slate-700 outline-none ring-slate-900/10 focus:ring-2 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
             />
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as SortOption)}
               aria-label="Sort products"
-              className="h-10 rounded-full border border-slate-200 bg-white px-4 text-sm text-slate-700 outline-none ring-slate-900/10 focus:ring-2"
+              className="h-10 rounded-full border border-slate-200 bg-white px-4 text-sm text-slate-700 outline-none ring-slate-900/10 focus:ring-2 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
             >
               <option value="featured">Featured</option>
               <option value="price-asc">Price: Low to High</option>
@@ -82,14 +101,32 @@ export function ShopClient() {
             </select>
           </div>
 
-          <p className="mb-4 text-sm text-slate-600">Showing {filteredProducts.length} products</p>
-          <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-            {filteredProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
+          <p className="mb-4 text-sm text-slate-600 dark:text-slate-400">Showing {filteredProducts.length} products</p>
+
+          {filteredProducts.length === 0 ? (
+            <div className="rounded-3xl border border-slate-200 bg-white p-10 text-center dark:border-slate-700 dark:bg-slate-900">
+              <p className="text-slate-600 dark:text-slate-400">No products match your filters.</p>
+              <Button className="mt-4" onClick={clearFilters}>
+                Clear filters
+              </Button>
+            </div>
+          ) : (
+            <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+              {filteredProducts.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          )}
         </div>
       </div>
+
+      {selectedCategories.length > 0 && (
+        <p className="mt-6 text-center text-sm text-slate-500">
+          <Link href="/shop" className="font-semibold text-slate-900 underline-offset-4 hover:underline dark:text-white">
+            View all products
+          </Link>
+        </p>
+      )}
     </div>
   );
 }

@@ -2,8 +2,8 @@ import { CartClient } from "@/components/cart-client";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Cart | MERCY MARKETING STORE",
-  description: "Review your items and complete checkout securely.",
+  title: "Cart",
+  description: "Review your items and complete your order.",
 };
 
 export default function CartPage() {

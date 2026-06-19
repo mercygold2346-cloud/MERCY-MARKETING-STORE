@@ -19,10 +19,10 @@ export function ProductCard({ product }: { product: Product }) {
     <motion.article
       whileHover={{ y: -5, scale: 1.01 }}
       transition={{ duration: 0.2 }}
-      className="group rounded-3xl border border-slate-200 bg-white p-3 shadow-sm transition-shadow hover:shadow-xl"
+      className="group rounded-3xl border border-slate-200 bg-white p-3 shadow-sm transition-shadow hover:shadow-xl dark:border-slate-700 dark:bg-slate-900 dark:hover:shadow-slate-900/40"
     >
       <Link href={`/product/${product.id}`} className="block">
-        <div className="relative h-52 overflow-hidden rounded-2xl bg-slate-100">
+        <div className="relative h-52 overflow-hidden rounded-2xl bg-slate-100 dark:bg-slate-800">
           <Image
             src={product.image}
             alt={product.name}
@@ -39,11 +39,11 @@ export function ProductCard({ product }: { product: Product }) {
       </Link>
       <div className="space-y-2 p-2 pt-4">
         <Link href={`/product/${product.id}`} className="block">
-          <h3 className="line-clamp-2 text-sm font-semibold text-slate-900">{product.name}</h3>
+          <h3 className="line-clamp-2 text-sm font-semibold text-slate-900 dark:text-slate-100">{product.name}</h3>
         </Link>
-        <RatingStars rating={product.rating} />
+        <RatingStars rating={product.rating} reviews={product.reviews} />
         <div className="flex items-center gap-2">
-          <span className="text-lg font-bold text-slate-900">{currency(product.price)}</span>
+          <span className="text-lg font-bold text-slate-900 dark:text-white">{currency(product.price)}</span>
           {product.originalPrice && (
             <span className="text-xs text-slate-400 line-through">
               {currency(product.originalPrice)}

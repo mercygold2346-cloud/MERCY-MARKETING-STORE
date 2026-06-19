@@ -13,22 +13,25 @@ type CartContextValue = {
   clearCart: () => void;
   itemCount: number;
   subtotal: number;
+  hydrated: boolean;
 };
 
 const CartContext = createContext<CartContextValue | undefined>(undefined);
 const CART_STORAGE_KEY = "mercy-store-cart";
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
-  const [cartItems, setCartItems] = useState<CartItem[]>(() => {
-    if (typeof window === "undefined") return [];
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
     try {
       const stored = window.localStorage.getItem(CART_STORAGE_KEY);
-      if (!stored) return [];
-      return JSON.parse(stored) as CartItem[];
+      if (stored) setCartItems(JSON.parse(stored) as CartItem[]);
     } catch {
-      return [];
+      setCartItems([]);
     }
-  });
+    setHydrated(true);
+  }, []);
 
   const addToCart = (product: Product) => {
     setCartItems((prev) => {
@@ -65,12 +68,13 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }, [cartItems]);
 
   useEffect(() => {
+    if (!hydrated) return;
     window.localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems));
-  }, [cartItems]);
+  }, [cartItems, hydrated]);
 
   return (
     <CartContext.Provider
-      value={{ cartItems, addToCart, removeFromCart, updateQuantity, clearCart, itemCount, subtotal }}
+      value={{ cartItems, addToCart, removeFromCart, updateQuantity, clearCart, itemCount, subtotal, hydrated }}
     >
       {children}
     </CartContext.Provider>
